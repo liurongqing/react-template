@@ -13,19 +13,19 @@ module.exports = {
     module: {
         rules: [
             { test: /\.tsx?$/, loader: "ts-loader" },
-            // { test: /\.scss$/, loader: 'typings-for-css-modules-loader?modules&sass' },
             {
-                test: /\.scss$/,
-                exclude: [/node_modules/],
-                // include: [/src/],
+                test: /\.(sa|sc|c)ss$/,
+                include: [/src/],
+                exclude: [/node_modules/,/assets/],
                 use: [
                     MiniCssExtractPlugin.loader,
                     {
                         loader: 'typings-for-css-modules-loader',
                         options: {
                             modules: true,
-                            namedExport: true
-                            // localIdentName: '[name]-[local]_[hash:4]',
+                            namedExport: true,
+                            camelCase: true,
+                            localIdentName: '[name]__[local]--[hash:base64:5]',
                         },
                     },
                     {
@@ -35,23 +35,51 @@ module.exports = {
             },
 
             // 公用样式
-            // {
-            //     test: /\.(sa|sc|c)ss$/,
-            //     include: [/assets/],
-            //     use: [
-            //         MiniCssExtractPlugin.loader,
-            //         {
-            //             loader: 'css-loader',
-            //         },
-            //         {
-            //             loader: 'sass-loader',
-            //             options: {
-            //                 outputStyle: 'expanded',
-            //             },
-            //         },
-            //     ],
-            // },
+            {
+                test: /\.(sa|sc|c)ss$/,
+                exclude: [/node_modules/],
+                include: [/assets/],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'typings-for-css-modules-loader'
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            outputStyle: 'expanded',
+                        },
+                    },
+                ],
+            },
 
+            // 图片处理
+            {
+                test: /\.(png|jpg|gif|svg)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            name: '[name]-[hash:5].[ext]',
+                            limit: 1000,
+                        }
+                    }
+                ]
+            },
+
+            // 字体处理
+            {
+                test: /\.(woff|eot|ttf)(\?t=(.*?))$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            name: '[name]-[hash:5].[ext]',
+                            limit: 10000, //
+                        }
+                    }
+                ]
+            }
         ],
 
     },
@@ -63,6 +91,18 @@ module.exports = {
             filename: '[name].[hash].css'
         }),
     ],
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                styles: {
+                    name: 'styles',
+                    test: /\.scss$/,
+                    chunks: 'all',
+                    enforce: true,
+                }
+            }
+        },
+    },
     devServer: {
         port: 9090,
         compress: true,

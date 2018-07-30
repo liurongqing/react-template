@@ -6,6 +6,9 @@ import {
     Switch,
 } from 'react-router-dom';
 
+import ScrollToTop from './plugins/ScrollToTop/index';
+
+import Header from './container/Layout/Header';
 
 import * as Loadable from 'react-loadable';
 import Loading from './plugins/Loading/index';
@@ -40,23 +43,28 @@ const routes = [
 
 export default () => (
     <Router>
-        <div>
-            <ul>
-                <li><Link to="/home">首页</Link></li>
-                <li><Link to="/about">关于</Link></li>
-            </ul>
-            <Switch>
-                {
-                    routes.map(route => (
-                        <Route
-                            exact={route.exact}
-                            key={route.path}
-                            path={route.path}
-                            component={route.component}
-                        />
-                    ))
-                }
-            </Switch>
-        </div>
+        <ScrollToTop>
+
+            <Header />
+
+            <div>
+                <ul>
+                    <li><Link to="/home">首页</Link></li>
+                    <li><Link to="/about">关于</Link></li>
+                </ul>
+                <Switch>
+                    {
+                        routes.map(route => (
+                            <Route
+                                exact={route.exact}
+                                key={route.path}
+                                path={route.path}
+                                component={route.component}
+                            />
+                        ))
+                    }
+                </Switch>
+            </div>
+        </ScrollToTop>
     </Router>
 )

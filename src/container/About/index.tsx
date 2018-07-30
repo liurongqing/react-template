@@ -1,6 +1,7 @@
 import * as React from 'react';
+import * as styles from './index.scss';
 
 export default (): any => (
-    <h1>About</h1>
+    <div className={styles.text}>About</div>
 )
 
