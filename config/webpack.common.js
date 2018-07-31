@@ -1,11 +1,14 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
+let env = process.env.NODE_ENV;
+env = env ? env.toLocaleLowerCase() : 'dev';
 
 module.exports = {
     entry: './src/index.tsx',
     output: {
-        path: path.resolve(__dirname, '../dist'),
+        path: path.resolve(__dirname, '../dist/'+env),
         chunkFilename: '[name].[hash:8].bundle.js',
         filename: '[name].[hash:8].js',
     },
@@ -16,7 +19,7 @@ module.exports = {
             {
                 test: /\.(sa|sc|c)ss$/,
                 include: [/src/],
-                exclude: [/node_modules/,/assets/],
+                exclude: [/node_modules/, /assets/],
                 use: [
                     MiniCssExtractPlugin.loader,
                     {
@@ -90,26 +93,36 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: '[name].[hash].css'
         }),
+        new webpack.DefinePlugin({
+            __DEV__: JSON.stringify(env === 'dev'),
+            __SQA__: JSON.stringify(env === 'sqa'),
+            __PROD__: JSON.stringify(env === 'prod'),
+        }),
     ],
     optimization: {
         splitChunks: {
+            chunks: 'all',
             cacheGroups: {
                 styles: {
                     name: 'styles',
                     test: /\.scss$/,
-                    chunks: 'all',
                     enforce: true,
-                }
+                },
+                vendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    name: 'vendor',
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                    name: 'common',
+                },
             }
         },
-    },
-    devServer: {
-        port: 9090,
-        compress: true,
-        historyApiFallback: true,
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
     },
-    mode: 'development',
 };
