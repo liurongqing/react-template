@@ -8,7 +8,7 @@ env = env ? env.toLocaleLowerCase() : 'dev';
 module.exports = {
     entry: './src/index.tsx',
     output: {
-        path: path.resolve(__dirname, '../dist/'+env),
+        path: path.resolve(__dirname, '../dist/' + env),
         chunkFilename: 'static/js/[name].[hash:8].bundle.js',
         filename: 'static/js/[name].[hash:8].js',
     },
@@ -21,7 +21,12 @@ module.exports = {
                 include: [/src/],
                 exclude: [/node_modules/, /assets/],
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '../../'
+                        },
+                    },
                     {
                         loader: 'typings-for-css-modules-loader',
                         options: {
@@ -43,7 +48,12 @@ module.exports = {
                 exclude: [/node_modules/],
                 include: [/assets/],
                 use: [
-                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: '../../'
+                        },
+                    },
                     {
                         loader: 'typings-for-css-modules-loader'
                     },
@@ -63,8 +73,9 @@ module.exports = {
                     {
                         loader: 'url-loader',
                         options: {
-                            name: '/static/image/[name]-[hash:5].[ext]',
+                            name: '[name]-[hash:5].[ext]',
                             limit: 1000,
+                            outputPath: 'static/image',
                         }
                     }
                 ]
@@ -73,13 +84,13 @@ module.exports = {
             // 字体处理
             {
                 test: /\.(woff|eot|ttf)/,
-                // test: /\.(woff|eot|ttf)/,
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
-                            name: '/static/font/[name]-[hash:5].[ext]',
-                            limit: 10000, 
+                            name: '[name]-[hash:5].[ext]',
+                            limit: 10,
+                            outputPath: 'static/font',
                         }
                     }
                 ]
@@ -92,7 +103,7 @@ module.exports = {
             template: path.resolve(__dirname, '../src/index.html'),
         }),
         new MiniCssExtractPlugin({
-            filename: 'static/css/[name].[hash].css'
+            filename: 'static/css/[name].[hash].css',
         }),
         new webpack.DefinePlugin({
             __DEV__: JSON.stringify(env === 'dev'),
@@ -105,7 +116,7 @@ module.exports = {
             chunks: 'all',
             cacheGroups: {
                 styles: {
-                    name: 'styles',
+                    name: 'app',
                     test: /\.scss$/,
                     enforce: true,
                 },

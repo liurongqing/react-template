@@ -1,31 +1,31 @@
 .container {
-    padding-top: 11.2vw;
-  
-    .box {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 9000;
-      height: 11.2vw;
-      line-height: 11.2vw;
-      background: #cccccc;
-      display: flex;
-      font-size: 4.2667vw;
-      justify-content: space-between;
-    }
-  
-    .center {
-      position: absolute;
-      left: 0;
-      right: 0;
-      text-align: center;
-      z-index: -1;
-    }
-    .left,
-    .right{
-        color: blue;
-        padding: 0 1.3333vw;
-    }
+  padding-top: 11.2vw;
+
+  .box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9000;
+    height: 11.2vw;
+    line-height: 11.2vw;
+    background: #ccc;
+    display: flex;
+    font-size: 4.2667vw;
+    justify-content: space-between;
   }
-  
+
+  .center {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: -1;
+  }
+
+  .left,
+  .right {
+    color: blue;
+    padding: 0 1.3333vw;
+  }
+}

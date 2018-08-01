@@ -1,10 +1,10 @@
+/* eslint no-undef: 0 */
 import * as React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Consumer } from '../../plugins/AppContext/index';
 import * as styles from './Header.scss';
 
 class Header extends React.Component {
-  
   goBack = () => {
     const { history }: any = this.props;
     history.go(-1);
