@@ -2,6 +2,7 @@ const path = require('path');
 const merge = require('webpack-merge');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const OfflinePlugin = require('offline-plugin');
 const common = require('./webpack.common');
 
 module.exports = merge(common, {
@@ -17,5 +18,6 @@ module.exports = merge(common, {
         },
       },
     }),
+    new OfflinePlugin(),
   ],
 });
